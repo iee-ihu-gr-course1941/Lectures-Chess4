@@ -139,4 +139,5 @@ function do_move() {
 
 function move_result(data){
 	fill_board_by_data(data);
+	$('#move_div').hide(1000);
 }
