@@ -25,8 +25,7 @@ function check_abort() {
 	$r = $st->execute();
 }
 
-
-function update_game_status() {
+function read_status() {
 	global $mysqli;
 	
 	$sql = 'select * from game_status';
@@ -35,17 +34,21 @@ function update_game_status() {
 	$st->execute();
 	$res = $st->get_result();
 	$status = $res->fetch_assoc();
-	
-	
+	return($status);
+}
+function update_game_status() {
+	global $mysqli;
+
+	$status = read_status();
 	$new_status=null;
 	$new_turn=null;
 	
-	$st3=$mysqli->prepare('select count(*) as aborted from players WHERE last_action< (NOW() - INTERVAL 5 MINUTE)');
+	$st3=$mysqli->prepare('select count(*) as aborted from players WHERE last_action< (NOW() - INTERVAL 15 MINUTE)');
 	$st3->execute();
 	$res3 = $st3->get_result();
 	$aborted = $res3->fetch_assoc()['aborted'];
 	if($aborted>0) {
-		$sql = "UPDATE players SET username=NULL, token=NULL WHERE last_action< (NOW() - INTERVAL 5 MINUTE)";
+		$sql = "UPDATE players SET username=NULL, token=NULL WHERE last_action< (NOW() - INTERVAL 15 MINUTE)";
 		$st2 = $mysqli->prepare($sql);
 		$st2->execute();
 		if($status['status']=='started') {

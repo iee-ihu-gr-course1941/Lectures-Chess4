@@ -35,10 +35,15 @@ function draw_empty_board(p) {
 }
 
 function fill_board() {
-	$.ajax({url: "chess.php/board/", success: fill_board_by_data });
+	$.ajax({url: "chess.php/board/", 
+		headers: {"X-Token": me.token},
+			//dataType: "json",
+			//contentType: 'application/json',
+			//data: JSON.stringify( {token: me.token}),
+			success: fill_board_by_data });
 }
 function reset_board() {
-	$.ajax({url: "chess.php/board/", method: 'POST',  success: fill_board_by_data });
+	$.ajax({url: "chess.php/board/", headers: {"X-Token": me.token}, method: 'POST',  success: fill_board_by_data });
 	$('#move_div').hide();
 	$('#game_initializer').show(2000);
 }
@@ -65,6 +70,7 @@ function login_to_game() {
 	$.ajax({url: "chess.php/players/"+p_color, 
 			method: 'PUT',
 			dataType: "json",
+			headers: {"X-Token": me.token},
 			contentType: 'application/json',
 			data: JSON.stringify( {username: $('#username').val(), piece_color: p_color}),
 			success: login_result,
@@ -84,15 +90,19 @@ function login_error(data,y,z,c) {
 }
 
 function game_status_update() {
-	$.ajax({url: "chess.php/status/", success: update_status });
+	$.ajax({url: "chess.php/status/", success: update_status,headers: {"X-Token": me.token} });
 }
 
 function update_status(data) {
+	var game_stat_old = game_status;
 	game_status=data[0];
 	update_info();
 	if(game_status.p_turn==me.piece_color &&  me.piece_color!=null) {
 		x=0;
 		// do play
+		if(game_stat_old.p_turn!=me.piece_color) {
+			fill_board();
+		}
 		$('#move_div').show(1000);
 		setTimeout(function() { game_status_update();}, 15000);
 	} else {
@@ -121,11 +131,12 @@ function do_move() {
 			dataType: "json",
 			contentType: 'application/json',
 			data: JSON.stringify( {x: a[2], y: a[3]}),
+			headers: {"X-Token": me.token},
 			success: move_result,
 			error: login_error});
 	
 }
 
 function move_result(data){
-	
+	fill_board_by_data(data);
 }
