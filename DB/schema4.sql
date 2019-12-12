@@ -102,7 +102,7 @@ UNLOCK TABLES;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 */ /*!50003 TRIGGER `game_status_update` BEFORE UPDATE ON `adise19_chess1`.`game_status` FOR EACH ROW BEGIN
+/*!50003 CREATE*/ /*!50017 */ /*!50003 TRIGGER `game_status_update` BEFORE UPDATE ON `adise19_chess4`.`game_status` FOR EACH ROW BEGIN
 		set NEW.last_change = now();
     END */;;
 DELIMITER ;
@@ -136,7 +136,7 @@ INSERT INTO `players` VALUES ('antonis','B'),('Nikos','W');
 UNLOCK TABLES;
 
 --
--- Dumping routines for database 'adise19_chess1'
+-- Dumping routines for database 'adise19_chess4'
 --
 /*!50003 DROP PROCEDURE IF EXISTS `clean_board` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
