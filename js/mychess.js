@@ -35,7 +35,7 @@ function draw_empty_board(p) {
 	t+='</table>';
 	
 	$('#chess_board').html(t);
-//	$('.chess_square').click(click_on_piece);
+	$('.chess_square').click(click_on_piece);
 }
 
 function fill_board() {
