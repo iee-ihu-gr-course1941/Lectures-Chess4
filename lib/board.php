@@ -56,8 +56,6 @@ function move_piece($x,$y,$x2,$y2,$token) {
 	print json_encode(['errormesg'=>"This move is illegal."]);
 	exit;
 }
-	
-	
 		
 function show_board($input) {
 	global $mysqli;

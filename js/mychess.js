@@ -1,5 +1,6 @@
 var me={};
 var game_status={};
+var board={};
 
 $(function () {
 	draw_empty_board();
@@ -10,6 +11,8 @@ $(function () {
 	$('#do_move').click( do_move);
 	$('#move_div').hide();
 	game_status_update();
+	$('#the_move_src').change( update_moves_selector);
+	$('#do_move2').click( do_move2);
 });
 
 
@@ -32,6 +35,7 @@ function draw_empty_board(p) {
 	t+='</table>';
 	
 	$('#chess_board').html(t);
+	$('.chess_square').click(click_on_piece);
 }
 
 function fill_board() {
@@ -48,6 +52,7 @@ function reset_board() {
 	$('#game_initializer').show(2000);
 }
 function fill_board_by_data(data) {
+	board=data;
 	for(var i=0;i<data.length;i++) {
 		var o = data[i];
 		var id = '#square_'+ o.x +'_' + o.y;
@@ -141,4 +146,43 @@ function do_move() {
 function move_result(data){
 	fill_board_by_data(data);
 	$('#move_div').hide(1000);
+}
+
+function update_moves_selector() {
+	$('.chess_square').removeClass('pmove').removeClass('tomove');
+	var s = $('#the_move_src').val();
+	var a = s.trim().split(/[ ]+/);
+	$('#the_move_dest').html('');
+	if(a.length!=2) {
+		return;
+	}
+	var id = '#square_'+ a[0]+'_'+a[1];
+	$(id).addClass('tomove');
+	for(i=0;i<board.length;i++) {
+		if(board[i].x==a[0] && board[i].y==a[1]) {
+			for(m=0;m<board[i].moves.length;m++) {
+				$('#the_move_dest').append('<option value="'+board[i].moves[m].x+' '+board[i].moves[m].y+'">'+board[i].moves[m].x+' '+board[i].moves[m].y+'</option>');
+				var id = '#square_'+ board[i].moves[m].x +'_' + board[i].moves[m].y;
+				$(id).addClass('pmove');
+			}
+			
+		}
+	}
+}
+
+function do_move2() {
+	$('#the_move').val($('#the_move_src').val() +' ' + $('#the_move_dest').val());
+	do_move();
+	$('.chess_square').removeClass('pmove').removeClass('tomove');
+}
+
+function click_on_piece(e) {
+	var o=e.target;
+	if(o.tagName!='TD') {o=o.parentNode;}
+	if(o.tagName!='TD') {return;}
+	
+	var id=o.id;
+	var a=id.split(/_/);
+	$('#the_move_src').val(a[1]+' ' +a[2]);
+	update_moves_selector();
 }
