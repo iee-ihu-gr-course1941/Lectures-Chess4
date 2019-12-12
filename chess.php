@@ -43,7 +43,7 @@ function handle_board($method,$input) {
                 show_board($input);
         } else if ($method=='POST') {
                 reset_board();
-				show_board();
+				show_board($input);
         }
 		
 }
@@ -53,8 +53,7 @@ function handle_piece($method, $x,$y,$input) {
         show_piece($x,$y);
     } else if ($method=='PUT') {
 		move_piece($x,$y,$input['x'],$input['y'],$input['token']);
-    }
-        
+    }    
 }
  
 function handle_player($method, $request,$input) {
@@ -66,7 +65,7 @@ function handle_player($method, $request,$input) {
                     break;
         case 'B': 
 		case 'W': handle_user($method, $b,$input);
-					break;
+					break;		
 		default: header("HTTP/1.1 404 Not Found");
 				 print json_encode(['errormesg'=>"Player $b not found."]);
                  break;

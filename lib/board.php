@@ -104,6 +104,9 @@ function show_board_by_player($b) {
 	if($status['status']=='started' && $status['p_turn']==$b && $b!=null) {
 		// It my turn !!!!
 		$n = add_valid_moves_to_board($board,$b);
+		
+		// Εάν n==0, τότε έχασα !!!!!
+		// Θα πρέπει να ενημερωθεί το game_status.
 	}
 	header('Content-type: application/json');
 	print json_encode($orig_board, JSON_PRETTY_PRINT);
